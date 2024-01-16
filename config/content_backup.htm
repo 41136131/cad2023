@@ -286,6 +286,29 @@ doc["threejsblock"].bind("click", threejsblock.do)
 <p></p>
 <p><!-- 程式執行 ouput 區 --></p>
 <div style="width: 100%; height: 100%;"><textarea autocomplete="off" id="kw_console2"></textarea></div>
+<h1 style="width: 100%; height: 100%;">任務一</h1>
+<h2>磁力吸引</h2>
+<p><span>有關磁力吸引的鋼球循環運動系統, 請參考</span><a href="https://youtu.be/r_LG8FDt51U?si=D6TZP_XarNUvVOye">這個影片</a><span>.<span> </span></span><span>或者透過課程檔案下載密碼觀看<a href="https://nfuedu-my.sharepoint.com/:v:/g/personal/yen_nfu_edu_tw/EcDmEvU3PKREq_noqkc_FeABZhbpfQ5p-f-3LuZn-PAQ1g?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0RpcmVjdCJ9fQ&amp;e=vF0sTa">這個影片</a>.</span></p>
+<p><span>根據<a href="https://www.etsy.com/listing/1253569674/perpetual-machine-simulator-perpetual">這個網站</a>宣稱是此一 Perpetual Motion Simulator 的原始創作者.</span></p>
+<p><span>同時參考 <a href="https://nfuedu-my.sharepoint.com/:b:/g/personal/yen_nfu_edu_tw/ETvxcyDptUtMlUj22ato4RYBJc5ekzCuC1pGFcOmUSXK3w?e=2miuR4">A perpetual motion machine powered by electromagnetism.pdf</a><span> </span>(需要下載密碼)</span></p>
+<p>電腦輔助設計與實習課程的任務一即可根據此一裝置的設計, 先採用電腦輔助設計軟體, 繪製系統所需的 3D 零組件, 然後轉為 STL 格式, import 進入 CoppeliaSim, 接著根據影片說明, 利用近接感測器(例如:<span> </span><a href="https://shopee.tw/%E9%9B%BB%E6%84%9F%E5%BC%8F-%E6%8E%A5%E8%BF%91%E9%96%8B%E9%97%9C-SN04N-SN04P-SN04Y-NPN-%E7%9B%B4%E6%B5%813%E7%B7%9A-%E5%9F%8B%E5%85%A5%E5%BC%8F-%E6%98%8E%E6%AD%A6%E6%A8%A1%E7%B5%84-i.795631261.18472134425">電感式近接開關</a>,<span> </span><a href="https://www.amazon.com/-/en/LY346/dp/B07V4PR84Y">Inductive proximity sensor</a>) 控制電磁鐵開關, 設法透過磁力吸引讓鋼球具有足夠動能返回圓形平台.</p>
+<p>有關利用 Arduino 控制卡與相關電路設計產生電磁力控制的模擬, 請參考<span> </span><a href="https://mde.tw/cad2023/content/PICSimLab.html">PICSimLab</a><span> </span>頁面中的說明.</p>
+<p>一旦完成 CoppeliaSim 與 Arduino 電路設計等機電資系統整合模擬, 就可以進一步利用 3D printer 列印出所需零組件, 結合實體電路設計完成此一系統的虛實整合.</p>
+<p>機電模擬系統:</p>
+<p>下載支援 IPv6 網路協定版本<span> </span><a href="https://nfuedu-my.sharepoint.com/:u:/g/personal/yen_nfu_edu_tw/EfEaYO4E4eBGtTV3QBCP0f0B3JBfrw11LslWmQyqZB75fw?e=Zf7hCp">CoppeliaSimEdu_4.5.1_rev4_for_cd2023.7z</a><span> </span>(需要下載密碼)</p>
+<p><a href="https://www.coppeliarobotics.com/helpFiles/">CoppeliaSim 使用者手冊</a>,<span> </span><a href="https://mde.tw/pjcopsim">CoppeliaSim 4.3.0 使用手冊網站</a></p>
+<p>模擬磁力的<a href="https://forum.coppeliarobotics.com/viewtopic.php?t=3923">討論</a>,<span> </span><a href="https://forum.coppeliarobotics.com/viewtopic.php?t=1501">1</a>,<span> </span><a href="https://forum.coppeliarobotics.com/viewtopic.php?t=7187">2</a></p>
+<p><a href="https://studywolf.wordpress.com/2016/04/18/using-vrep-for-simulation-of-force-controlled-models/">Force Control Modeling</a></p>
+<p><a href="https://github.com/CoppeliaRobotics/scenes/raw/master/otherScenes/simpleMagnetDemo.ttt">simpleMagnetDemo.ttt</a></p>
+<p>模擬原理:</p>
+<p>Perpetual Motion Simulator 主要的電路設計包含右側軌道下方的電磁鐵, 通電後可產生一定大小的磁吸力, 當圓形鐵球循著軌道由平台孔洞往下滾動, 經過軌道下方近接感測器 (Proximity sensor) 時 (距離 3mm-5mm), 透過感應, 控制電路將會短暫啟動電磁鐵 (10 miliseconds), 促使圓形鐵球加速滾動, 其磁力大小約略與圓形鐵球距離的平方成反比 (<a href="https://en.wikipedia.org/wiki/Computational_electromagnetics">Computational Electromagnetics</a>,<span> </span><a href="https://javalab.org/en/magnetic_field_around_a_coil_en/">磁場模擬</a>).</p>
+<p>因此圓形鐵球除了從平台高度落下時, 將位能轉換為動能外, 與軌道滾動磨擦以及空氣阻力所損耗的運動能, 將額外由電磁鐵開關間所得到的磁力吸引能量進行加速, 以便取得足夠的動能在脫離軌道末端後, 重新回到圓形平台.</p>
+<p><img alt="" height="367" src="/images/1.png" width="491"/></p>
+<p><span>(<a href="https://www.etsy.com/listing/1253569674/perpetual-machine-simulator-perpetual">圖源</a></span><span>)</span></p>
+<p><span>電磁力未啟動下的 perpetual motion simulator CoppeliaSim 場景模擬:</span></p>
+<p><span><img alt="" height="368" src="/images/02.gif" width="487"/></span></p>
+<p><span><a href="https://cad.onshape.com/documents/42e52a740033264a7d82e595/w/2f1d43f82796f4e05a79c0b5/e/f2fa8150f24c8a3d1aa4d036?renderMode=0&amp;uiState=650b848e93b8b544db72a044">Images and part files in Onshape</a><span><span> </span>(STL file import into CoppeliaSim 尺寸由 mm 放大10 倍至 cm, 且 z 軸向上, 場景中圓球直徑為 12.825 cm, 平台圓孔直徑為 20 cm)</span></span></p>
+<p><span><span></span></span></p>
 <h1 style="width: 100%; height: 100%;">個人評分</h1>
 <h2>更新日誌</h2>
 <p>2024/01/11:新增首頁圖片</p>
@@ -294,7 +317,10 @@ doc["threejsblock"].bind("click", threejsblock.do)
 <h2>自我評分</h2>
 <p><!-- Brython 程式執行的結果, 都以 brython_div1 作為切入位置 --></p>
 <div id="brython_div2">自評分數:60分</div>
-<div>我知道以我的網站想要拿60分確實非常厚臉皮，但是我還是希望這門課可以通過，雖然網頁是在最後一個禮拜趕出來的，而且也沒有什麼東西，不過我還是在個人網頁上花了不少心思跟精力，讓我的網頁從0到有，最重要的是我網頁是我自己用的不假借他人之手，但是不可否認我在遇到瓶頸時受到了其他同學的幫助，但是我還是秉持著自己的作業自己做的精神把它給完成了。<img alt="" height="314" src="/images/430.png" width="550"/></div>
+<div>我知道以我的網站想要拿60分確實非常厚臉皮，但是我還是希望這門課可以通過，雖然網頁是在最後一個禮拜趕出來的，而且也沒有什麼東西，不過我還是在個人網頁上花了不少心思跟精力，讓我的網頁從0到有，最重要的是我網頁是我自己用的不假借他人之手，但是不可否認我在遇到瓶頸時受到了其他同學的幫助，但是我還是秉持著自己的作業自己做的精神把它給完成了。</div>
+<div></div>
+<div></div>
+<div><img alt="" height="314" src="/images/430.png" width="550"/></div>
 <!-- editor2 結束 -->
 <p>
 <script src="https://unpkg.com/three@0.144.0/build/three.js" type="text/javascript"></script>
