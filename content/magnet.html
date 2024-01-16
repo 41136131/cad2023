@@ -142,18 +142,135 @@ img.add_border {
           </div>
           
         </header>
-    <div id="tipue_search_content">更新日誌 << <a href='更新日誌.html'>Previous</a> <br /><h1>自我評分</h1>
-<p><!-- Brython 程式執行的結果, 都以 brython_div1 作為切入位置 --></p>
-<div id="brython_div2">自評分數:60分</div>
-<div>我知道以我的網站想要拿60分確實非常厚臉皮，但是我還是希望這門課可以通過，雖然網頁是在最後一個禮拜趕出來的，而且也沒有什麼東西，不過我還是在個人網頁上花了不少心思跟精力，讓我的網頁從0到有，最重要的是我網頁是我自己用的不假借他人之手，但是不可否認我在遇到瓶頸時受到了其他同學的幫助，但是我還是秉持著自己的作業自己做的精神把它給完成了。</div>
-<div></div>
-<div></div>
-<div><img alt="" height="314" src="./../images/430.png" width="550"/></div>
-<div></div>
-<!-- editor2 結束 -->
-<p>
-<script src="https://unpkg.com/three@0.144.0/build/three.js" type="text/javascript"></script>
-</p><br />更新日誌 << <a href='更新日誌.html'>Previous</a> </div>
+    <div id="tipue_search_content">磁力吸引 << <a href='磁力吸引.html'>Previous</a> <a href='個人評分.html'>Next</a> >> 個人評分<br /><h1>magnet</h1>
+<p><span>利用 Lua 模擬磁力的程式碼:</span></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">function sysCall_init()
+ 
+-- This line defines the beginning of a function called sysCall_init(). This function is a special callback function in CoppeliaSim that gets called once when the simulation starts.
+ 
+    sensor = sim.getObject('./sensor')
+ 
+-- In this line, the script is getting a reference to an object named "sensor" in the simulation scene. This object is expected to exist within the same hierarchy as the script.
+ 
+    shape = sim.getObject('.')
+ 
+-- Here, the script is getting a reference to the object where the script is attached. The dot . represents the current object.
+ 
+    sim.setObjectInt32Param(shape, sim.shapeintparam_static, 0)
+ 
+-- This line is setting an integer parameter for the "shape" object. Specifically, it's setting the sim.shapeintparam_static parameter to 0. This means that the "shape" object is initially not considered as a static object.
+ 
+    nominalForce = 0.001
+ 
+-- This line sets a variable nominalForce to a value of 0.001. It appears to represent a constant force value used in the script.
+ 
+    enabled = true
+ 
+-- This line initializes a boolean variable enabled to true. This variable seems to control whether the script should apply forces or not.
+ 
+    previousPos = sim.getObjectPosition(shape, sim.handle_world)
+ 
+-- Here, the script is getting the initial position of the "shape" object in the world coordinate system and storing it in the previousPos variable. This will be used later for checking if the object has moved.
+ 
+-- The sysCall_init function sets up initial parameters and conditions for the script. It's executed once at the beginning of the simulation.
+ 
+-- Now, let's move on to the sysCall_actuation function:
+ 
+function sysCall_actuation()
+ 
+-- This line defines the beginning of another special callback function in CoppeliaSim called sysCall_actuation(). This function gets called repeatedly during the simulation to perform actions in each time step.
+ 
+    if enabled then
+ 
+-- This line checks if the enabled variable is true. If it's true, it means the script should apply forces. If it's false, the script won't apply any forces.
+ 
+        local r, dist, pt, obj = sim.handleProximitySensor(sensor)
+ 
+-- Here, the script is using the sim.handleProximitySensor function to check if the proximity sensor (defined earlier as "sensor") is detecting any objects nearby. It returns information about the detected object.
+ 
+        if r &gt; 0 then
+ 
+-- This line checks if r (the return value of the proximity sensor function) is greater than 0. If it is, it means the sensor has detected an object nearby.
+ 
+            dist = dist + 0.02
+ 
+-- This line adds an offset of 0.02 to the dist variable. This offset is added to prevent an infinite force when objects are in direct contact. It's a safety measure.
+ 
+            local force = nominalForce / (dist * dist)
+ 
+-- Here, the script calculates the force to be applied based on the nominalForce and the squared distance (dist) between the object and the detected object. This seems to be a simple inverse square law force calculation.
+ 
+            local m = sim.getObjectMatrix(shape, sim.handle_world)
+            m[4] = 0
+            m[8] = 0
+            m[12] = 0
+ 
+-- These lines retrieve the transformation matrix (m) of the "shape" object with respect to the world coordinate system and set its translational components to 0. This effectively extracts the rotational part of the transformation matrix.
+ 
+            local forceVector = sim.multiplyVector(m, {0, 0, force})
+ 
+-- This line multiplies the modified transformation matrix m by a force vector {0, 0, force} to obtain a force vector in absolute world coordinates.
+ 
+            sim.addForceAndTorque(shape, forceVector, {0, 0, 0})
+ 
+-- Here, the script applies the computed forceVector to the "shape" object using sim.addForceAndTorque. This function applies the force to the center of mass of the object for one simulation time step.
+ 
+            if notFirstPass then
+ 
+-- This line checks if the notFirstPass variable is true. It's used to ensure that this part of the script is executed after the first simulation step.
+ 
+                local p = sim.getObjectPosition(shape, sim.handle_world)
+ 
+-- Here, the script is getting the current position of the "shape" object in the world coordinate system.
+ 
+                local dx = {p[1] - previousPos[1], p[2] - previousPos[2], p[3] - previousPos[3]}
+ 
+-- This line calculates the difference in position (dx) between the current position (p) and the previous position (previousPos) of the object in world coordinates.
+ 
+                local d = math.sqrt(dx[1] * dx[1] + dx[2] * dx[2] + dx[3] * dx[3])
+ 
+-- The script calculates the Euclidean distance d based on the differences in position components dx. This distance is used to check if the object has moved significantly.
+ 
+                if d &lt; 0.0001 then
+ 
+-- This line checks if the object has moved by comparing d to a small threshold value (0.0001). If d is less than the threshold, it means the object hasn't moved significantly.
+ 
+                    sim.setObjectInt32Param(shape, sim.shapeintparam_static, 1)
+ 
+-- If the object hasn't moved significantly, this line sets the sim.shapeintparam_static parameter to 1, making the object static in the simulation.
+ 
+                    sim.resetDynamicObject(shape)
+ 
+-- This line resets the dynamics of the object. It might be necessary to reset the object's dynamics after making it static to avoid any issues.
+ 
+                    enabled = false
+ 
+-- Finally, this line sets the enabled variable to false, which will prevent the script from applying further forces since the object is now considered static and not moving.
+ 
+                end
+ 
+-- The if block is closed.
+ 
+                previousPos = p
+ 
+-- Regardless of whether the object has become static or not, the previousPos variable is updated with the current position for use in the next iteration of the sysCall_actuation function.
+ 
+            end
+ 
+-- The if notFirstPass block is closed.
+ 
+        end
+ 
+-- The if r &gt; 0 block is closed.
+ 
+    end
+ 
+-- The if enabled block is closed.
+ 
+    notFirstPass = true
+ 
+-- This line sets the notFirstPass variable to `true</pre>
+<br />磁力吸引 << <a href='磁力吸引.html'>Previous</a> <a href='個人評分.html'>Next</a> >> 個人評分</div>
         
     <!-- footer -->
       <div class="container">
